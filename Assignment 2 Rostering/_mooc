@@ -1,0 +1,1330 @@
+{
+    "assignmentKey": "c2QGQWR1FM",
+    "history": {
+        "files": {
+            "models/nroster.mzn": {
+                "changes": [
+                    {
+                        "edits": [
+                            {
+                                "line": 60,
+                                "text": "constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 61,
+                                "text": "constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality([sh[n,d] | n in NURSE where wd[n,d] = emergency], [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) else true endif;",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "%constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s));",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "%constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality([sh[n,d] | n in NURSE where wd[n,d] = emergency], [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) else true endif;",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713933401.928
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 60,
+                                "text": "%constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 61,
+                                "text": "constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s));",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713933699.065
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 61,
+                                "text": "%constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality([sh[n,d] | n in NURSE where wd[n,d] = emergency], [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) else true endif;",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality([sh[n,d] | n in NURSE where wd[n,d] = emergency], [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) else true endif;",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713933860.267
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 4,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 5,
+                                "text": "enum NURSE; % set of nurses to roster",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 6,
+                                "text": "%enum SHIFT = { OFF, NIGH, MORN, DAY, EVEN };",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 7,
+                                "text": "enum NURSE;                                              % set of nurses to roster",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 8,
+                                "text": "int: nday;     % number of days for roster",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 9,
+                                "text": "int: nday;                                               % number of days for roster",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 10,
+                                "text": "array[NURSE,DAYS] of bool: rostered_off; % nurse is guaranteed an off shift",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 11,
+                                "text": "array[NURSE,DAYS] of bool: rostered_off;                 % nurse is guaranteed an off shift",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 11,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 12,
+                                "text": "constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])(sh[n,d] = OFF); %A1",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 13,
+                                "text": "constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) /\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) -> (sh[n,d+3] != NIGH)); %A2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 14,
+                                "text": "constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) /\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF)); %A2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 15,
+                                "text": "constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH -> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY)",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 16,
+                                "text": "                                             /\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 17,
+                                "text": "constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) -> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY))); %A2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 18,
+                                "text": "constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY)); %A2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "                 (sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              /\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              -> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              /\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "               -> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              /\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "             -> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 20,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 21,
+                                "text": "int: maxweek; % maximum working shifts in any 7 day period",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 22,
+                                "text": "int: maxnightfort; % maximum night shifts in any 14 day period",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 23,
+                                "text": "int: minfort; % minimum number of working shifts in any 14 day period",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 24,
+                                "text": "array[SHIFT,DAYS] of int: minshift; % minimum number of nurses rostered on each shift",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "int: maxweek;                                            % maximum working shifts in any 7 day period",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "int: maxnightfort;                                       % maximum night shifts in any 14 day period",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "int: minfort;                                            % minimum number of working shifts in any 14 day period",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "array[SHIFT,DAYS] of int: minshift;                      % minimum number of nurses rostered on each shift",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT])); %B1",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 27,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-6))(sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek)); %B2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 28,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-13))((sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 29,
+                                "text": "                                                     /\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort))); %B2",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "           SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-6))",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-13))(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 30,
+                                "text": "       /\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 31,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 32,
+                                "text": "array[NURSE] of int: shift_cost;",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 33,
+                                "text": "array[NURSE] of int: shift_cost;                          % cost of nurse to work a shift",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 33,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 34,
+                                "text": "constraint total_cost = sum(n in NURSE, d in DAYS where sh[n,d] != OFF)(shift_cost[n]);",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 35,
+                                "text": "constraint total_cost = sum(n in NURSE, d in DAYS where sh[n,d] != OFF)",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 35,
+                                "text": "                           (shift_cost[n]);                                      % calculate total cost of rostered nurses",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 36,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 37,
+                                "text": "enum WARD;  % set of wards to roster",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 38,
+                                "text": "WARD: dummy; % dummy ward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 39,
+                                "text": "array[WARD,DAYS] of int: minward; % minimum number of nurses rostered to each ward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 40,
+                                "text": "int: maxward; % maximum number of wards any nurse can work in the roster period",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 41,
+                                "text": "array[NURSE,WARD] of var 0..1: worked;",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "enum WARD;                                                % set of wards to roster",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "WARD: dummy;                                              % dummy ward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "array[WARD,DAYS] of int: minward;                         % minimum number of nurses rostered to each ward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "int: maxward;                                             % maximum number of wards any nurse can work in the roster period",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "array[NURSE,WARD] of var 0..1: worked;                    % boolean array if nurse worked in ward in roster period",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 44,
+                                "text": "constraint forall(d in DAYS)(assert(minward[dummy,d] = 0, \"Dummy ward has non zero minimum on day \\(d)\\n\"));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 45,
+                                "text": "constraint forall(n in NURSE, d in DAYS)(sh[n,d] = OFF <-> wd[n,d] = dummy);",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 46,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD])); %D1",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 47,
+                                "text": "constraint forall(n in NURSE, w in WARD)(worked[n,w] = max([bool2int(wd[n,d] = w) | d in DAYS]));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 48,
+                                "text": "constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "constraint forall(d in DAYS)(assert(minward[dummy,d] = 0,                        \"Dummy ward has non zero minimum on day \\(d)\\n\"));",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "constraint forall(n in NURSE, d in DAYS)(sh[n,d] = OFF <-> wd[n,d] = dummy);     % rostered off then dummy ward and vice versa",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "           WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "constraint forall(n in NURSE, w in WARD)(worked[n,w] = ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "             max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 49,
+                                "text": "constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 50,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 52,
+                                "text": "SKILL: senior;                         % which skill is senior",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 53,
+                                "text": "array[NURSE] of set of SKILL: skill;   % skills that each nurse has",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 54,
+                                "text": "array[WARD] of set of SKILL: required; % particular skills for each ward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 55,
+                                "text": "opt WARD: emergency; % emergency ward if its being rostered",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 56,
+                                "text": "SKILL: senior;                                             % which skill is senior",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 56,
+                                "text": "array[NURSE] of set of SKILL: skill;                       % skills that each nurse has",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 56,
+                                "text": "array[WARD] of set of SKILL: required;                     % particular skills for each ward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 56,
+                                "text": "opt WARD: emergency;                                       % emergency ward if its being rostered",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 57,
+                                "text": "array[SHIFT] of set of SLICE: shift_slice = [{PREDAWN, AM}, {AM,PM}, {PM, LATE}, {LATE, PREDAWN}, {}];",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 58,
+                                "text": "array[SHIFT] of set of SLICE: shift_slice = ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 58,
+                                "text": "[{PREDAWN, AM}, {AM,PM}, {PM, LATE}, {LATE, PREDAWN}, {}]; % assign slice covered to shifts",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 58,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 59,
+                                "text": "constraint forall(d in DAYS, w in WARD where required[w] != {})(exists(n in NURSE)(wd[n,d] = w /\\ (required[w] subset skill[n])));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 60,
+                                "text": "constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s));",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 61,
+                                "text": "constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality([sh[n,d] | n in NURSE where wd[n,d] = emergency], [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) else true endif;",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "constraint forall(d in DAYS, w in WARD where required[w] != {})(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "           exists(n in NURSE)(wd[n,d] = w /\\ (required[w] subset skill[n])));     % skilled nurse must be assigned to ward with required skill",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "                  slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s)); % senior nurse rostered on every slice",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "             [sh[n,d] | n in NURSE where wd[n,d] = emergency], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "             [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "             [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "             else true endif;                                                     % nurse must handover to next nurse",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 63,
+                                "text": "",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 66,
+                                "text": "array[NURSE,DAYS] of var WARD: wd; % ward rostered for each nurse",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "array[NURSE,DAYS] of var WARD: wd;  % ward rostered for each nurse",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713935539.408
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 80,
+                                "text": "constraint forall(d in DAYS, w in WARD where required[w] != {})(",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 81,
+                                "text": "           exists(n in NURSE)(wd[n,d] = w /\\ (required[w] subset skill[n])));     % skilled nurse must be assigned to ward with required skill",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 82,
+                                "text": "constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 83,
+                                "text": "                  slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s)); % senior nurse rostered on every slice",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 84,
+                                "text": "constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality(",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 85,
+                                "text": "             [sh[n,d] | n in NURSE where wd[n,d] = emergency], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 86,
+                                "text": "             [MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 87,
+                                "text": "             [card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 88,
+                                "text": "             else true endif;                                                     % nurse must handover to next nurse",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "%constraint forall(d in DAYS, w in WARD where required[w] != {})(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "           %exists(n in NURSE)(wd[n,d] = w /\\ (required[w] subset skill[n])));     % skilled nurse must be assigned to ward with required skill",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "%constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "                  %slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s)); % senior nurse rostered on every slice",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "%constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "             %[sh[n,d] | n in NURSE where wd[n,d] = emergency], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "             %[MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "             %[card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 89,
+                                "text": "             %else true endif;                                                     % nurse must handover to next nurse",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713941225.936
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 13,
+                                "text": "constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 14,
+                                "text": "                 (sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 15,
+                                "text": "%constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 15,
+                                "text": "                 %(sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713941538.918
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 13,
+                                "text": "%constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 14,
+                                "text": "                 %(sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 15,
+                                "text": "constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 16,
+                                "text": "              /\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 17,
+                                "text": "              -> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 18,
+                                "text": "constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              /\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 20,
+                                "text": "constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 21,
+                                "text": "               -> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 22,
+                                "text": "              /\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 23,
+                                "text": "constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 24,
+                                "text": "             -> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(n in NURSE, d in DAYS where rostered_off[n,d])",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "                 (sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "%constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              %/\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              %-> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "%constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              %/\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "%constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "               %-> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              %/\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "%constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "             %-> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "%constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713941881.111
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 15,
+                                "text": "%constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 16,
+                                "text": "              %/\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 17,
+                                "text": "              %-> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 18,
+                                "text": "%constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 19,
+                                "text": "              %/\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 20,
+                                "text": "%constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 21,
+                                "text": "               %-> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 22,
+                                "text": "              %/\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 23,
+                                "text": "%constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 24,
+                                "text": "             %-> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 25,
+                                "text": "%constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              /\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              -> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              /\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "               -> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "              /\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "             -> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 26,
+                                "text": "constraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 35,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 36,
+                                "text": "           SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 37,
+                                "text": "%constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 37,
+                                "text": "           %SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713943783.082
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 35,
+                                "text": "%constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 36,
+                                "text": "           %SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 37,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-6))",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 38,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 39,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-13))(",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 40,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 41,
+                                "text": "       /\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "           SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "%constraint forall(n in NURSE)(forall(d in 1..(nday-6))",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "          %(sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "%constraint forall(n in NURSE)(forall(d in 1..(nday-13))(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "          %(sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "       %/\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713943985.039
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 37,
+                                "text": "%constraint forall(n in NURSE)(forall(d in 1..(nday-6))",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 38,
+                                "text": "          %(sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 39,
+                                "text": "%constraint forall(n in NURSE)(forall(d in 1..(nday-13))(",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 40,
+                                "text": "          %(sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 41,
+                                "text": "       %/\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-6))",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "constraint forall(n in NURSE)(forall(d in 1..(nday-13))(",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "          (sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 42,
+                                "text": "       /\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 62,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 63,
+                                "text": "           WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 64,
+                                "text": "%constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 64,
+                                "text": "           %WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713944302.899
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 62,
+                                "text": "%constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 63,
+                                "text": "           %WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 64,
+                                "text": "constraint forall(n in NURSE, w in WARD)(worked[n,w] = ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 65,
+                                "text": "             max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 66,
+                                "text": "constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "constraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "           WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "%constraint forall(n in NURSE, w in WARD)(worked[n,w] = ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "             %max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "%constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713944629.393
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 64,
+                                "text": "%constraint forall(n in NURSE, w in WARD)(worked[n,w] = ",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 65,
+                                "text": "             %max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 66,
+                                "text": "%constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "constraint forall(n in NURSE, w in WARD)(worked[n,w] = ",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "             max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not",
+                                "type": "insertion"
+                            },
+                            {
+                                "line": 67,
+                                "text": "constraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1713954081.335
+                    },
+                    {
+                        "edits": [
+                            {
+                                "line": 17,
+                                "text": "              -> (sh[n,d+3] != NIGH));                                           % no nurse has more than 2 days off in a row",
+                                "type": "deletion"
+                            },
+                            {
+                                "line": 18,
+                                "text": "              -> (sh[n,d+3] != NIGH));                                           % no nurse is assigned more than 3 nights in a row",
+                                "type": "insertion"
+                            }
+                        ],
+                        "timestamp": 1714116179.098
+                    }
+                ],
+                "snapshot": "include \"globals.mzn\";\n% nurse rostering project\n\n\n% STAGE A data\nenum NURSE;                                              % set of nurses to roster\nenum SHIFT = { MORN, DAY, EVEN, NIGH, OFF };\nint: nday;                                               % number of days for roster\nset of int: DAYS = 1..nday; \narray[NURSE,DAYS] of bool: rostered_off;                 % nurse is guaranteed an off shift\n\n% STAGE A constraints\nconstraint forall(n in NURSE, d in DAYS where rostered_off[n,d])\n                 (sh[n,d] = OFF);                                                % nurses rostered off if guaranteed an off shift\nconstraint forall(d in 1..(nday-3), n in NURSE)((sh[n,d] = NIGH) \n              /\\ (sh[n,d+1] = NIGH) /\\ (sh[n,d+2] = NIGH) \n              -> (sh[n,d+3] != NIGH));                                           % no nurse is assigned more than 3 nights in a row\nconstraint forall(d in 1..(nday-2), n in NURSE)((sh[n,d] = OFF) \n              /\\ (sh[n,d+1] = OFF) -> (sh[n,d+2] != OFF));                       % no nurse has more than 2 days off in a row\nconstraint forall(d in 1..(nday-1), n in NURSE)((sh[n,d] = NIGH \n               -> sh[n,d+1] != MORN /\\ sh[n,d+1] != DAY) \n              /\\ (sh[n,d] = EVEN -> sh[n,d+1] != MORN));                         % no morn or day shifts after night and no morn shifts after even\nconstraint forall(d in 2..(nday-1), n in NURSE)((sh[n,d] = DAY) \n             -> ((sh[n,d-1] = DAY) \\/ (sh[n,d+1] = DAY)));                       % day shift on days other than last can't be isolated\nconstraint forall(n in NURSE)((sh[n,1] = DAY) -> (sh[n,2] = DAY));               % day shift on first day can't be isolated\n\n\n% STAGE B data\nint: maxweek;                                            % maximum working shifts in any 7 day period\nint: maxnightfort;                                       % maximum night shifts in any 14 day period\nint: minfort;                                            % minimum number of working shifts in any 14 day period\narray[SHIFT,DAYS] of int: minshift;                      % minimum number of nurses rostered on each shift\n\n% STAGE B constraints\nconstraint forall(d in DAYS)(global_cardinality_low_up([sh[n,d] | n in NURSE], \n           SHIFT, [minshift[s,d] | s in SHIFT], [card(NURSE) | s in SHIFT]));    % each shift per day has minimum nurses rostered\nconstraint forall(n in NURSE)(forall(d in 1..(nday-6))\n          (sum([sh[n,d+i] != OFF | i in 0..6]) <= maxweek));                     % nurses not working more than max shifts in a week\nconstraint forall(n in NURSE)(forall(d in 1..(nday-13))(\n          (sum([sh[n,d+i] != OFF | i in 0..13]) >= minfort) \n       /\\ (sum([sh[n,d+i] = NIGH | i in 0..13]) <= maxnightfort)));              % nurses not working less than min or more than max nights in fortnight\n\n\n% STAGE C data\narray[NURSE] of int: shift_cost;                          % cost of nurse to work a shift\n\n% STAGE C constraints\nconstraint total_cost = sum(n in NURSE, d in DAYS where sh[n,d] != OFF)\n                           (shift_cost[n]);                                      % calculate total cost of rostered nurses\n\n\n% STAGE D data\nenum WARD;                                                % set of wards to roster\nWARD: dummy;                                              % dummy ward\narray[WARD,DAYS] of int: minward;                         % minimum number of nurses rostered to each ward\nint: maxward;                                             % maximum number of wards any nurse can work in the roster period\narray[NURSE,WARD] of var 0..1: worked;                    % boolean array if nurse worked in ward in roster period\n\n% STAGE D constraints\nconstraint forall(d in DAYS)(assert(minward[dummy,d] = 0,                        \"Dummy ward has non zero minimum on day \\(d)\\n\"));\nconstraint forall(n in NURSE, d in DAYS)(sh[n,d] = OFF <-> wd[n,d] = dummy);     % rostered off then dummy ward and vice versa\nconstraint forall(d in DAYS)(global_cardinality_low_up([wd[n,d] | n in NURSE], \n           WARD, [minward[w,d] | w in WARD], [card(NURSE) | w in WARD]));        % minimum nurses assigned to each ward\nconstraint forall(n in NURSE, w in WARD)(worked[n,w] = \n             max([bool2int(wd[n,d] = w) | d in DAYS]));                          % fill \"worked\" array with 1 if worked 0 if not\nconstraint forall(n in NURSE)(sum(w in WARD)(worked[n,w]) <= maxward);           % nurses cant be assigned different wards more than maxward\n\n\n% STAGE E data\nenum SKILL;\nSKILL: senior;                                             % which skill is senior\narray[NURSE] of set of SKILL: skill;                       % skills that each nurse has\narray[WARD] of set of SKILL: required;                     % particular skills for each ward\nopt WARD: emergency;                                       % emergency ward if its being rostered\nenum SLICE = { PREDAWN, AM, PM, LATE };\narray[SHIFT] of set of SLICE: shift_slice = \n[{PREDAWN, AM}, {AM,PM}, {PM, LATE}, {LATE, PREDAWN}, {}]; % assign slice covered to shifts\n\n% STAGE E constraints\n%constraint forall(d in DAYS, w in WARD where required[w] != {})(\n           %exists(n in NURSE)(wd[n,d] = w /\\ (required[w] subset skill[n])));     % skilled nurse must be assigned to ward with required skill\n%constraint forall(slice in SLICE, d in DAYS)(exists(n in NURSE, s in SHIFT)(\n                  %slice in shift_slice[s] /\\ senior in skill[n] /\\ sh[n,d] = s)); % senior nurse rostered on every slice\n%constraint if occurs(emergency) then forall(d in DAYS)(global_cardinality(\n             %[sh[n,d] | n in NURSE where wd[n,d] = emergency], \n             %[MORN, DAY, EVEN, NIGH, OFF], [1, 1, 1, 1, 0], \n             %[card(NURSE), card(NURSE), card(NURSE), card(NURSE), card(NURSE)])) \n             %else true endif;                                                     % nurse must handover to next nurse\n\n\n%%%% DECISIONS\narray[NURSE,DAYS] of var SHIFT: sh; % shift for each nurse on each day\nvar 0..nday*sum(shift_cost): total_cost;\narray[NURSE,DAYS] of var WARD: wd;  % ward rostered for each nurse\nsolve minimize total_cost;\n"
+            }
+        },
+        "parent": "4c8d1b99-87f1-40b7-9ce1-38dfd38aed40",
+        "uuid": "dcb20aa1-edee-4fb2-9917-68d1c5d8354a"
+    },
+    "modelAssignments": [
+        {
+            "id": "Jo5NoFv6uP",
+            "model": "models/nroster.mzn",
+            "name": "Nroster Model 1"
+        }
+    ],
+    "moocName": "FIT5216 S1 2024",
+    "moocPasswordString": "Submission token",
+    "name": "Assignment 2 Rostering",
+    "sendMeta": true,
+    "solutionAssignments": [
+        {
+            "data": "data/nroster01.dzn",
+            "id": "nS7XGZTCOF",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 01",
+            "timeout": "30"
+        },
+        {
+            "data": "data/nroster04.dzn",
+            "id": "RTIZIAYhIA",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 04",
+            "timeout": "30"
+        },
+        {
+            "data": "data/nroster05.dzn",
+            "id": "NOQLz5DmMf",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 05",
+            "timeout": "30"
+        },
+        {
+            "data": "data/nroster06.dzn",
+            "id": "KYGMfITU20",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 06",
+            "timeout": "60"
+        },
+        {
+            "data": "data/nroster07.dzn",
+            "id": "8EVvVCiubE",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 07",
+            "timeout": "60"
+        },
+        {
+            "data": "data/nroster08.dzn",
+            "id": "aQnqLph9Uv",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 08",
+            "timeout": "60"
+        },
+        {
+            "data": "data/nroster09.dzn",
+            "id": "RBMh0qZHJm",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 09",
+            "timeout": "60"
+        },
+        {
+            "data": "data/nroster10.dzn",
+            "id": "wUIpWQqdoO",
+            "model": "models/nroster.mzn",
+            "name": "Nroster 10",
+            "timeout": "60"
+        }
+    ],
+    "submissionTerms": "This is an individual assignment. Your submission has to be entirely your own work. We will use similarity detection software to detect any attempt at collusion, and the penalties are quite harsh. If in doubt, contact your teaching team with any questions! You may not use large language models such as ChatGPT for any part of this assignment",
+    "submissionURL": "https://autograder.optimisation-2020.cloud.edu.au/api/index.php"
+}

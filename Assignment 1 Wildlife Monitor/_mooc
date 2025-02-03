@@ -1,0 +1,99 @@
+{
+    "assignmentKey": "cLOp89l5H0",
+    "history": {
+        "files": {
+            "models/animal.mzn": {
+                "changes": [
+                ],
+                "snapshot": "enum LOC; % set of locations\nLOC: base; % base location where information is collected\nconstraint assert(base = min(LOC),\"base is not the first mentioned location\\n\");\nint: n; % number of traps available\narray[LOC] of int: wild; % amount of interesting wildlife at each location\narray[LOC] of int: cost; % cost to setup trap at location, -ve means unavailable\nconstraint assert(cost[base] = 0, \"Cost of base location is not 0\\n\");\narray[LOC,LOC] of int: d; % distance from one location to another (symmetric)\nconstraint forall(l1, l2 in LOC where l1 <= l2)(assert(d[l1,l2] = d[l2,l1], \"distance is not symmetric at \\(l1) \\(l2)\\n\"));\nconstraint forall(l in LOC)(assert(d[l,l] = 0, \"self distance for \\(l) is not zero\\n\"));\nint: move; % movement distance of animals\nint: link; % wireless link maximum communication distance;\nint: mind; % mininum distance between two traps\nint: opcost; % cost to maintain/operate camera trap\nint: budget; % total budget for traps\n\nset of int: PLACE0 = 0..n;\nset of int: PLACE = 1..n;\n\narray[PLACE0] of var LOC: x; % location where camera trap is placed (except 0)\nconstraint x[0] = base; % first chosen location must be base\n%constraint forall(i in PLACE)(x[i] != base); % the remaining selections must not be base (part A)\n\narray[LOC] of var bool: covered; % list of whether each location is covered by a trap\nconstraint forall(l in LOC)(covered[l] = exists(i in PLACE0 where x[i] != base)(d[l, x[i]] <= move)); % generate covered\nconstraint forall(i, j in PLACE where i < j /\\ x[i] != base /\\ x[j] != base)(d[x[i],x[j]] >= mind); % minimum distance between traps\nconstraint forall(l in x)(cost[l] >= 0); % cost can't be negative\n\nconstraint ((sum(i in PLACE where x[i] != base)(1) * opcost) \n           + sum(i in PLACE where x[i] != base)(cost[x[i]])) <= budget; % total cost must be less than budget\nconstraint forall(i in 1..n-1)(if x[i] = base then x[i+1] = base endif); % move dummies to end\n\narray[PLACE] of var PLACE0: s; % location to send info (part C only)\n%constraint forall(i in PLACE)(s[i] = 0); % set s to 0 forall\nconstraint forall(i in PLACE where x[i] = base)(s[i] = 0); % dummy locations always send to base\nconstraint forall(i in PLACE where x[i] != base)(s[i] < i); % tree structure must send to previous index \nconstraint forall(i in PLACE where x[i] !=base)(d[x[i],x[s[i]]] <= link); % distance between trap and previous trap or base smaller than link\n\nvar int: total_wild = sum(l in LOC)(if covered[l] then wild[l] else 0 endif); % calculate total wildlife in traps\n\nsolve maximize total_wild;\n\n%output [show(covered)];\n%output [show(total_wild)];\n%output [show(x)];\n%output [show(s)];\n"
+            }
+        },
+        "parent": "7f7f89c0-2321-4f06-9e96-fbbd9cd80217",
+        "uuid": "ee52d137-87d2-4669-9a16-ba8e2baa7526"
+    },
+    "modelAssignments": [
+        {
+            "id": "X85WR2k7a8",
+            "model": "models/animal.mzn",
+            "name": "Animal Model 1"
+        }
+    ],
+    "moocName": "FIT5216 S1 2024",
+    "moocPasswordString": "Submission token",
+    "name": "Assignment 1 Wildlife Monitor",
+    "sendMeta": true,
+    "solutionAssignments": [
+        {
+            "data": "data/animal01.dzn",
+            "id": "A6Vdej10tJ",
+            "model": "models/animal.mzn",
+            "name": "Animal 1",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal02.dzn",
+            "id": "WtNRqcoeBL",
+            "model": "models/animal.mzn",
+            "name": "Animal 2",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal03.dzn",
+            "id": "Jl0JqlQPSB",
+            "model": "models/animal.mzn",
+            "name": "Animal 3",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal04.dzn",
+            "id": "htwj1zkCSx",
+            "model": "models/animal.mzn",
+            "name": "Animal 4",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal05.dzn",
+            "id": "BfiQkPXG1Z",
+            "model": "models/animal.mzn",
+            "name": "Animal 5",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal06.dzn",
+            "id": "OxjUR85rar",
+            "model": "models/animal.mzn",
+            "name": "Animal 6",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal07.dzn",
+            "id": "jr0CGLSpoI",
+            "model": "models/animal.mzn",
+            "name": "Animal 7",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal08.dzn",
+            "id": "RRR5fkG1cD",
+            "model": "models/animal.mzn",
+            "name": "Animal 8",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal09.dzn",
+            "id": "TrUkP9KBHP",
+            "model": "models/animal.mzn",
+            "name": "Animal 9",
+            "timeout": "60"
+        },
+        {
+            "data": "data/animal10.dzn",
+            "id": "LaavKJsKI5",
+            "model": "models/animal.mzn",
+            "name": "Animal 10",
+            "timeout": "60"
+        }
+    ],
+    "submissionTerms": "This is an individual assignment. Your submission has to be entirely your own work. We will use similarity detection software to detect any attempt at collusion, and the penalties are quite harsh. If in doubt, contact your teaching team with any questions! You may not use large language models such as ChatGPT for any part of this assignment\r\n",
+    "submissionURL": "https://autograder.optimisation-2020.cloud.edu.au/api/index.php"
+}

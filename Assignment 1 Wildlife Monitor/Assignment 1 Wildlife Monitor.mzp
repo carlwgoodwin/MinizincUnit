@@ -1,0 +1,25 @@
+{
+    "openFiles": [
+    ],
+    "openTab": -1,
+    "projectFiles": [
+        "_mooc",
+        "data/animal00.dzn",
+        "data/animal01.dzn",
+        "data/animal02.dzn",
+        "data/animal03.dzn",
+        "data/animal04.dzn",
+        "data/animal05.dzn",
+        "data/animal06.dzn",
+        "data/animal07.dzn",
+        "data/animal08.dzn",
+        "data/animal09.dzn",
+        "data/animal10.dzn",
+        "models/animal.mzc",
+        "models/animal.mzn",
+        "../WS/W3_MostSeparated/models/mostseparated_array.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.chuffed.chuffed",
+    "selectedBuiltinConfigVersion": "0.13.1",
+    "version": 106
+}
